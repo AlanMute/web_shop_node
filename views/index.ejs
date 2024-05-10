@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <title>Онлайн магазин</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -14,18 +15,27 @@
         <div class="catalog-info">
             <a href="/" class="main-text">Главная</a>
         </div>
-
         <div class="search-bar">
-
+            <form method="get">
+                <input type="text" name="search" placeholder="Поиск...">
+                <button type="submit">Поиск</button>
+            </form>
         </div>
         <div class="user-cart-info">
-            <button class="user-info">
-                <a href="/login">Войти</a>
-            </button>
+            <% if (user) { %>
+                <button class="user-info">
+                    <a href="/profile"><%= user.Login %></a>
+                </button>
+                <button class="cart">
+                    <a href="/cart">Корзина: <%= cartCount %> товаров</a>
+                </button>
+            <% } else { %>
+                <button class="user-info">
+                    <a href="/login">Войти</a>
+                </button>
+            <% } %>
         </div>
     </header>
-
-
 
     <div class="products">
         <% if (products && products.length> 0) { %>
@@ -54,7 +64,7 @@
                         <% } %>
     </div>
 
-    <script src="/js/script.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

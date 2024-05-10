@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/login.css">
+    <title>Страница входа и регистрации</title>
+</head>
+
+<body>
+    <header>
+        <div class="catalog-info">
+            <a href="/" class="main-text">Главная</a>
+        </div>
+        <div class="search-bar">
+            <span class="personal-profile">Вход в аккаунт</span>
+        </div>
+        <div class="user-cart-info">
+            <button class="user-info">
+                <a href="/login">Войти</a>
+            </button>
+        </div>
+    </header>
+
+    <div class="login-register-container">
+        <!-- Форма авторизации -->
+        <form id="login-form" class="login-form" style="display: block;">
+            <h2>Войти</h2>
+            <label for="login-username">Логин:</label>
+            <input type="text" id="login-username" name="username" required>
+
+            <label for="login-password">Пароль:</label>
+            <input type="password" id="login-password" name="password" required>
+
+            <button type="submit">Войти</button>
+
+            <p>Еще не зарегистрированы? <a href="#" onclick="showRegisterForm()">Зарегистрируйтесь</a></p>
+        </form>
+
+        <form id="register-form" class="login-form" style="display: none;">
+            <h2>Зарегистрироваться</h2>
+            <label for="register-username">Логин:</label>
+            <input type="text" id="register-username" name="username" required>
+
+            <label for="register-password">Пароль:</label>
+            <input type="password" id="register-password" name="password" required>
+
+            <button type="submit">Зарегистрироваться</button>
+
+            <p>Уже зарегистрированы? <a href="#" onclick="showLoginForm()">Войти</a></p>
+        </form>
+    </div>
+
+    <script>
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+    </script>
+
+    <script src="/js/login.js"></script>
+</body>
+
+</html>

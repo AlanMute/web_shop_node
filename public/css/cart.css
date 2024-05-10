@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.catalog-info {
+    margin-left: 150px;
+}
+
+.main-text {
+    margin-right: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white; 
+    text-decoration: none;
+}
+
+.catalog-text {
+    color: white; 
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.catalog-info .catalog-text:hover {
+    color: #e6e6e6; 
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.personal-profile{
+    margin: 12px;
+    font-weight: bold;
+    font-size: 24px;
+    color: white;
+}
+
+.user-cart-info {
+    margin-right: 50px;
+}
+
+.user-info {
+    margin-right: 5px;
+    padding: 8px 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #358137;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-info a {
+    color: white; 
+    text-decoration: none; 
+}
+
+.user-info:hover {
+    background-color: #388e3c;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.cart {
+    text-decoration: none;
+    background-color: #358137;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart a{
+    text-decoration: none;
+    color: white;
+}
+
+.cart:hover {
+    background-color: #388e3c;
+}
+
+
+.cart-items { 
+    margin-top: 50px;
+    margin-left: 350px;
+    margin-right: 350px;
+}
+
+.cart-items table {
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.cart-items table th,
+.cart-items table td {
+    padding: 20px;
+    text-align: center;
+}
+
+.cart-items button{ 
+    padding: 5px 7px;
+    font-size: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-items button:hover{ 
+    background-color: #45a049;
+}
+
+.checkout-button {
+    margin-right: 90px;
+    margin-top: 20px;
+    text-align: right;
+}
+
+.checkout-button button {
+    padding: 10px 14px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-button button:hover {
+    background-color: #45a049;
+}
+
+
+

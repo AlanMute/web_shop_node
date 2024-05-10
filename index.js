@@ -74,6 +74,34 @@ app.get('/login', async (req, res) => {
     }
 });
 
+app.get('/cart', async (req, res) => {
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+
+    const user = req.user
+
+    try {
+        const cartItems = await dataSource.getCartItems(user.UserID);
+        cartCount = await dataSource.getCartCount(user.UserID);
+
+        let totalPrice = 0;
+        for (const item of cartItems) {
+            totalPrice += item.Price * item.Quantity;
+        }
+
+        res.render('cart', {
+            user: req.user,
+            cartItems,
+            totalPrice,
+            cartCount,
+        });
+    } catch (error) {
+        console.error('Ошибка при получении данных о корзине:', error);
+        res.status(500).send('Ошибка сервера');
+    }
+});
+
 app.post('/login-obr', async (req, res) => {
     const { username, password } = req.body;
     const user = await dataSource.getUserByUsername(username);
@@ -134,6 +162,32 @@ app.post('/cart/add', async (req, res) => {
         return res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 });
+
+app.post('/cart/remove', async (req, res) => {
+    const { product_id } = req.body;
+
+    if (!req.user) {
+        res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+
+    const userId = req.user.UserID;
+
+    try {
+        await dataSource.removeCartItem(userId, product_id);
+        const cartCount = await dataSource.getCartCount(userId);
+        const totalPrice = await dataSource.getCartTotalPrice(userId);
+        console.log(cartCount, totalPrice)
+        return res.status(200).json({
+            success: true,
+            cartCount: cartCount,
+            totalPrice: totalPrice,
+        });
+    } catch (error) {
+        console.error('Ошибка при удалении товара из корзины:', error);
+        return res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

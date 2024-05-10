@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/cart.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Корзина</title>
+</head>
+
+<body>
+    <header>
+        <div class="catalog-info">
+            <a href="/" class="main-text">Главная</a>
+        </div>
+        <div>
+            <div class="search-bar">
+                <span class="personal-profile">Корзина</span>
+            </div>
+        </div>
+        <div class="user-cart-info">
+            <button class="user-info">
+                <a href="/profile">
+                    <%= user.Login %>
+                </a>
+            </button>
+            <button class="cart">
+                <a href="/cart">Корзина: <%= cartCount %> товаров</a>
+            </button>
+        </div>
+    </header>
+
+    <div class="cart-items">
+        <% if (cartItems.length> 0) { %>
+            <table>
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Действие</th>
+                </tr>
+                <% cartItems.forEach(item=> { %>
+                    <tr>
+                        <td>
+                            <%= item.Name %>
+                        </td>
+                        <td>
+                            <%= item.Quantity %>
+                        </td>
+                        <td>
+                            <%= item.Price * item.Quantity %> руб.
+                        </td>
+                        <td>
+                            <form name="remove-form">
+                                <input type="hidden" name="product_id" value="<%= item.ProductID %>">
+                                <button type="submit">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </table>
+            <div class="checkout-button">
+                <p class="total-price">Итого: <%= totalPrice %> руб.</p>
+                <form action="/checkout" method="POST">
+                    <button type="submit">Купить</button>
+                </form>
+            </div>
+            <% } else { %>
+                <p>Корзина пуста.</p>
+                <% } %>
+    </div>
+
+    <script src="/js/cart.js"></script>
+</body>
+
+</html>

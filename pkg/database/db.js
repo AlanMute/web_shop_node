@@ -122,36 +122,41 @@ class LocalDataSource {
         await this.pool.execute(query, [quantity, productId]);
     }
 
-async getCartItems(userId) {
-    const query = `
+    async getCartItems(userId) {
+        const query = `
         SELECT Products.ProductID, Products.Name, Products.Price, Cart.Quantity
         FROM Cart
         INNER JOIN Products ON Cart.ProductID = Products.ProductID
         WHERE Cart.UserID = ?`;
-    const [rows] = await this.pool.query(query, [userId]);
-    return rows;
-}
+        const [rows] = await this.pool.query(query, [userId]);
+        return rows;
+    }
 
-async removeCartItem(userId, productId) {
-    let query_to_total = 'SELECT Quantity FROM Cart WHERE UserID = ? AND ProductID = ?';
-    const [rows] = await this.pool.execute(query_to_total, [userId, productId]);
-    const quantity = rows[0].Quantity
-    
-    await this.pool.execute('UPDATE Products SET Count = Count + ? WHERE ProductID = ?', [quantity, productId]);
+    async removeCartItem(userId, productId) {
+        let query_to_total = 'SELECT Quantity FROM Cart WHERE UserID = ? AND ProductID = ?';
+        const [rows] = await this.pool.execute(query_to_total, [userId, productId]);
+        const quantity = rows[0].Quantity
 
-    const query = 'DELETE FROM Cart WHERE UserID = ? AND ProductID = ?';
-    await this.pool.execute(query, [userId, productId]);
-}
+        await this.pool.execute('UPDATE Products SET Count = Count + ? WHERE ProductID = ?', [quantity, productId]);
 
-async getCartTotalPrice(userId) {
-    const query = `
+        const query = 'DELETE FROM Cart WHERE UserID = ? AND ProductID = ?';
+        await this.pool.execute(query, [userId, productId]);
+    }
+
+    async getCartTotalPrice(userId) {
+        const query = `
         SELECT SUM(Products.Price * Cart.Quantity) AS totalPrice
         FROM Cart
         INNER JOIN Products ON Cart.ProductID = Products.ProductID
         WHERE Cart.UserID = ?`;
-    const [rows] = await this.pool.query(query, [userId]);
-    return rows[0].totalPrice || 0;
-}
+        const [rows] = await this.pool.query(query, [userId]);
+        return rows[0].totalPrice || 0;
+    }
+
+    async buyProducts(userId) {
+        const query = 'DELETE FROM Cart WHERE UserID = ?';
+        await this.pool.execute(query, [userId]);
+    }
 
 }
 

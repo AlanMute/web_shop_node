@@ -140,7 +140,10 @@ app.post('/cart/add', async (req, res) => {
         const user = req.user;
 
         if (!user) {
-            return res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+            return res.json({
+                success: false,
+                redirect: "/login",
+            });
         }
 
         const addResult = await dataSource.addToCart(user.UserID, product_id, quantity);
@@ -155,11 +158,11 @@ app.post('/cart/add', async (req, res) => {
                 remainingCount: remainingCount,
             });
         } else {
-            return res.status(400).json({ success: false, error: addResult.message });
+            return res.status(400);
         }
     } catch (error) {
         console.error('Ошибка при добавлении товара в корзину:', error);
-        return res.status(500).json({ success: false, error: 'Ошибка сервера' });
+        return res.status(500);
     }
 });
 
@@ -184,6 +187,23 @@ app.post('/cart/remove', async (req, res) => {
         });
     } catch (error) {
         console.error('Ошибка при удалении товара из корзины:', error);
+        return res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
+app.post('/cart/buy', async (req, res) => {
+    if (!req.user) {
+        res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+    const userId = req.user.UserID;
+
+    try {
+        await dataSource.buyProducts(userId)
+        return res.status(200).json({
+            success: true,
+        });
+    } catch (error) {
+        console.error('Ошибка при покупке товара:', error);
         return res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 });

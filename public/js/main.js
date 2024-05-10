@@ -46,11 +46,11 @@ $(document).on('submit', 'form[name="add_to_cart_form"]', function (e) {
                     quantityInput.attr('max', remainingCount);
                 }
             } else {
-                alert('Ошибка при добавлении товара в корзину:', response.error);
+                window.location.href = response.redirect
             }
         },
         error: function (error) {
-            alert('Ошибка при выполнении AJAX-запроса:', error);
+            alert('Ошибка при добавлении товара в корзину.');
         }
     });
 });
@@ -92,3 +92,14 @@ function createProductElement(product) {
 
     return productDiv;
 }
+
+$('input[name="quantity"]').on('input', function() {
+    var inputValue = $(this).val();
+    var addButton = $(this).closest('form').find('button[name="add_to_cart"]');
+
+    if (!inputValue || inputValue == 0) {
+        addButton.prop('disabled', true);
+    } else {
+        addButton.prop('disabled', false);
+    }
+});

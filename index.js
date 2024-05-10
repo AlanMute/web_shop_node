@@ -5,7 +5,6 @@ const mysql = require('mysql2');
 const LocalDataSource = require('./pkg/database/db');
 const SessionManager = require('./pkg/session/manager');
 const cookieParser = require('cookie-parser');
-app.use(cookieParser());
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -18,10 +17,13 @@ const pool = mysql.createPool({
 const promisePool = pool.promise();
 const dataSource = new LocalDataSource(promisePool);
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
+app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
 
 app.use((req, res, next) => {
     const sessionId = req.cookies ? req.cookies['sessionId'] : null;
@@ -63,7 +65,6 @@ app.get('/search', async (req, res) => {
     }
 });
 
-
 app.get('/login', async (req, res) => {
     try {
         res.render('login');
@@ -102,6 +103,35 @@ app.post('/register-obr', async (req, res) => {
     } else {
         await dataSource.createUser(username, password);
         res.json({ success: true });
+    }
+});
+
+app.post('/cart/add', async (req, res) => {
+    try {
+        const { product_id, quantity } = req.body;
+        const user = req.user;
+
+        if (!user) {
+            return res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+        }
+
+        const addResult = await dataSource.addToCart(user.UserID, product_id, quantity);
+
+        if (addResult.success) {
+            const cartCount = await dataSource.getCartCount(user.UserID);
+            remainingCount = await dataSource.getProductStock(product_id);
+
+            return res.json({
+                success: true,
+                cartCount: cartCount,
+                remainingCount: remainingCount,
+            });
+        } else {
+            return res.status(400).json({ success: false, error: addResult.message });
+        }
+    } catch (error) {
+        console.error('Ошибка при добавлении товара в корзину:', error);
+        return res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 });
 

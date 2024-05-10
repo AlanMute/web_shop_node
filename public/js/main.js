@@ -1,20 +1,56 @@
-$(document).on('submit', '.search-bar form', function(e) {
-    e.preventDefault(); // Предотвращаем стандартное поведение отправки формы
+$(document).on('submit', '.search-bar form', function (e) {
+    e.preventDefault();
 
-    // Получаем значения из формы
     const form = $(this);
     const searchQuery = form.find('input[name="search"]').val();
 
-    // Отправляем AJAX-запрос на сервер
     $.ajax({
         url: `/search?&query=${searchQuery}`,
         method: 'GET',
-        success: function(response) {
-            // Обработка ответа от сервера
+        success: function (response) {
             updateProductList(response);
         },
-        error: function(error) {
+        error: function (error) {
             console.error('Ошибка при выполнении запроса:', error);
+        }
+    });
+});
+
+$(document).on('submit', 'form[name="add_to_cart_form"]', function (e) {
+    e.preventDefault();
+
+    const form = $(this);
+    const formData = form.serialize();
+
+    $.ajax({
+        url: '/cart/add',
+        method: 'POST',
+        data: formData,
+        success: function (response) {
+            if (response.success) {
+                $('.cart a').text(`Корзина: ${response.cartCount} товаров`);
+                
+                const quantityInput = form.find('input[name="quantity"]');
+                const remainingCount = response.remainingCount;
+                
+                if (remainingCount <= 0) {
+                    form.closest('.product').find('p:contains("Осталось:")').replaceWith('<p><strong>НЕТ В НАЛИЧИИ</strong></p>');
+                    form.remove();
+                } else {
+                    form.closest('.product').find('p:contains("Осталось:")').text(`Осталось: ${remainingCount} шт.`);
+                    
+                    const currentQuantity = parseInt(quantityInput.val(), 10);
+                    if (currentQuantity > remainingCount) {
+                        quantityInput.val(remainingCount);
+                    }
+                    quantityInput.attr('max', remainingCount);
+                }
+            } else {
+                alert('Ошибка при добавлении товара в корзину:', response.error);
+            }
+        },
+        error: function (error) {
+            alert('Ошибка при выполнении AJAX-запроса:', error);
         }
     });
 });

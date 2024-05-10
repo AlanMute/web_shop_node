@@ -51,7 +51,7 @@
                         <p>Осталось: <%= product.Count %> шт.</p>
                         <form name="add_to_cart_form">
                             <input type="hidden" name="product_id" value="<%= product.ProductID %>">
-                            <input type="number" name="quantity" value="1" min="1" max="<%= product.Count %>" inputmode="numeric" pattern="[0-9]*"><br>
+                            <input type="number" name="quantity" class="status" value="1" min="1" max="<%= product.Count %>" inputmode="numeric" pattern="[0-9]*"><br>
                             <button type="submit" class="add_to_cart_pr" name="add_to_cart">Добавить в корзину</button>
                         </form>
                         <% } else { %>

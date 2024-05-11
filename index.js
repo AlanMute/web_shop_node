@@ -25,7 +25,6 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-
 app.use((req, res, next) => {
     const sessionId = req.cookies ? req.cookies['sessionId'] : null;
     
@@ -275,7 +274,14 @@ app.post('/feedback/send', async (req, res) => {
     }
 });
 
-
+app.use(async (req, res, next) => {
+    user = req.user
+    cartCount = 0
+    if (user) {
+        cartCount = await dataSource.getCartCount(user.UserID);
+    }
+    res.status(404).render('notFound', {user, cartCount});
+});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

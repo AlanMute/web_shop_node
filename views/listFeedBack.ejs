@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin.css">
+    <title>Жалобы</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="catalog-info">
+            <a href="/" class="main-text">Главная</a>
+        </div>
+        <div class="search-bar">
+            <span class="action">Жалобная книга</span>
+        </div>
+        <div class="user-cart-info">
+            <button class="user-info">
+                <a href="/profile">
+                    <%= user.Login %>
+                </a>
+            </button>
+        </div>
+    </header>
+
+    <div class="feedbacks">
+        <h1>Список фидбеков</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Тема</th>
+                    <th>Сообщение</th>
+                    <th>Дата создания</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% feedbacks.forEach(feedback => { %>
+                    <tr data-feedback-id="<%= feedback.FeedbackID %>">
+                        <td><%= feedback.Email %></td>
+                        <td><%= feedback.Subject %></td>
+                        <td><%= feedback.Message %></td>
+                        <td class="created-at"><%= feedback.CreatedAt %></td>
+                        <td>
+                            <form  name="remove-form">
+                                <input type="hidden" name="feedbackId" value="<%= feedback.FeedbackID %>">
+                                <button type="submit" class="delete-feedback">Удалить</button>
+                            </form>
+                            <!-- <button class="delete-feedback">Удалить</button> -->
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+
+</html>

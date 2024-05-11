@@ -112,3 +112,50 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #45a049;
 }
+
+.feedbacks {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%; /* Ширина блока */
+}
+
+.feedbacks h1 {
+    text-align: center;
+}
+
+.feedbacks table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden; /* Скрываем содержимое, выходящее за пределы таблицы */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.feedbacks th,
+.feedbacks td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Горизонтальные линии разделения */
+    overflow-wrap: break-word;
+    max-width: 300px;
+}
+
+.feedbacks th {
+    background-color: #f2f2f2; /* Цвет фона для заголовков */
+}
+
+.feedbacks button.delete-feedback {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #ff6347; /* Цвет кнопки */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.feedbacks button.delete-feedback:hover {
+    background-color: #ff4433; /* Измененный цвет кнопки при наведении */
+}

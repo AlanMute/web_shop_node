@@ -15,16 +15,18 @@
             <a href="/" class="main-text">Главная</a>
         </div>
         <div class="search-bar">
-            <span class="not-found">Ошибка 404</span>
+            <span class="not-found"></span>
         </div>
         <div class="user-cart-info">
             <% if (user) { %>
                 <button class="user-info">
                     <a href="/profile"><%= user.Login %></a>
                 </button>
+                <% if (user.Login !== 'admin') { %>
                 <button class="cart">
                     <a href="/cart">Корзина: <%= cartCount %> товаров</a>
                 </button>
+                <% } %>
             <% } else { %>
                 <button class="user-info">
                     <a href="/login">Войти</a>

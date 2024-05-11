@@ -190,6 +190,44 @@ class LocalDataSource {
             throw error;
         }
     }
+
+    async getProduct(productId) {
+        const query = 'SELECT * FROM Products WHERE ProductID = ?';
+        const [rows] = await this.pool.query(query, [productId]);
+
+        return rows[0] || null;
+    }
+
+    async updProduct(name, price, image, description, count, productId) {
+        const query = 'UPDATE Products SET Name = ?, Price = ?, Image = ?, Description = ?, Count = ? WHERE ProductID = ?';
+        try {
+            await this.pool.execute(query, [name, price, image, description, count, productId]);
+        } catch (error) {
+            console.error('Ошибка при получении пользователя по имени пользователя:', error);
+            throw error;
+        }
+    }
+
+    async getFeedbacks() {
+        const query = 'select * from Feedback';
+        try {
+            const [rows] = await this.pool.execute(query);
+            return rows
+        } catch (error) {
+            console.error('Ошибка при получении фидбеков:', error);
+            throw error;
+        }
+    }
+
+    async delFeedback(feedbackId) {
+        const query = 'DELETE FROM Feedback WHERE FeedbackID = ?';
+        try {
+            await this.pool.execute(query, [feedbackId]);
+        } catch (error) {
+            console.error('Ошибка при получении фидбеков:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = LocalDataSource;

@@ -135,6 +135,30 @@ app.get('/admin/add_product', async (req, res) => {
     res.render('addProduct', { user });
 });
 
+app.get('/admin/ed_product', async (req, res) => {
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.redirect('/');
+    }
+    user = req.user
+    const productId = req.query.product_id;
+    const product = await dataSource.getProduct(productId)
+    if (!product){
+        return res.redirect('/');
+    }
+
+    res.render('editProduct', { user, product });
+});
+
+app.get('/all-feedback', async (req, res) => {
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.redirect('/');
+    }
+    user = req.user
+    const feedbacks = await dataSource.getFeedbacks()
+
+    res.render('listFeedBack', { user, feedbacks });
+});
+
 app.post('/login-obr', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -321,6 +345,46 @@ app.post('/add-product', async (req, res) => {
         res.status(200).json({ success: true, message: 'Добавление товара прошло успешно' });
     } catch (error) {
         console.error('Ошибка при удалении товара:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
+app.post('/ed-product', async (req, res) => {
+    const { product_id, name, price, image, description, count } = req.body;
+
+    if (!product_id || !name || !price || !image || !description || !count) {
+        return res.status(400).json({ success: false, error: 'Заполнены не все поля!' });
+    }
+
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+
+    try {
+        await dataSource.updProduct(name, price, image, description, count, product_id);
+        res.status(200).json({ success: true, message: 'Изменение товара прошло успешно' });
+    } catch (error) {
+        console.error('Ошибка при удалении товара:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
+app.post('/del-feedback', async (req, res) => {
+    const { feedbackId } = req.body;
+    
+    if (!feedbackId) {
+        return res.status(400).json({ success: false, error: 'Фидбэка нет' });
+    }
+
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+
+    try {
+        await dataSource.delFeedback(feedbackId);
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Ошибка при удалении фидбэка:', error);
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 });

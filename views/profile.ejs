@@ -35,9 +35,15 @@
 
     <div class="profile-container">
             <p>Добро пожаловать, <b><%= username %></b>!</p>
-            <form action="/feedback" method="GET">
-                <button type="submit" class="feedback">Обратная связь</button>
-            </form>
+            <% if (isAdmin) { %>
+                <form action="/all-feedback" method="GET">
+                    <button type="submit" class="feedback">Посмотреть жалобы</button>
+                </form>
+            <% } else {%>
+                <form action="/feedback" method="GET">
+                    <button type="submit" class="feedback">Обратная связь</button>
+                </form>
+            <% } %>
             <form action="/logout" method="POST">
                 <button type="submit" class="logout">Выйти</button>
             </form>

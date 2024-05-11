@@ -3,12 +3,13 @@ $(document).on('submit', '.search-bar form', function (e) {
 
     const form = $(this);
     const searchQuery = form.find('input[name="search"]').val();
-
+    const isAdmin = form.data('is-admin');
+    
     $.ajax({
         url: `/search?&query=${searchQuery}`,
         method: 'GET',
         success: function (response) {
-            updateProductList(response);
+            updateProductList(response, isAdmin);
         },
         error: function (error) {
             console.error('Ошибка при выполнении запроса:', error);
@@ -55,14 +56,14 @@ $(document).on('submit', 'form[name="add_to_cart_form"]', function (e) {
     });
 });
 
-function updateProductList(products) {
+function updateProductList(products, isAdmin) {
     const productsContainer = document.querySelector('.products');
 
     productsContainer.innerHTML = '';
 
     if (products.length > 0) {
         products.forEach(product => {
-            const productElement = createProductElement(product);
+            const productElement = createProductElement(product, isAdmin);
             productsContainer.appendChild(productElement);
         });
     } else {
@@ -70,7 +71,7 @@ function updateProductList(products) {
     }
 }
 
-function createProductElement(product) {
+function createProductElement(product, isAdmin) {
     const productDiv = document.createElement('div');
     productDiv.classList.add('product');
 
@@ -80,11 +81,22 @@ function createProductElement(product) {
         <p>Цена: ${product.Price} руб.</p>
         ${product.Count > 0 ? `
             <p>Осталось: ${product.Count} шт.</p>
-            <form name="add_to_cart_form">
-                <input type="hidden" name="product_id" value="${product.ProductID}">
-                <input type="number" name="quantity" value="1" min="1" max="${product.Count}" inputmode="numeric" pattern="[0-9]*"><br>
-                <button type="submit" class="add_to_cart_pr" name="add_to_cart">Добавить в корзину</button>
-            </form>
+            ${isAdmin ? `
+                <form class="edit-product" method="GET" action="/admin/ed_product">
+                    <input type="hidden" name="product_id" value="${product.ProductID}">
+                    <button type="submit" name="edit_product">Изменить товар</button>
+                </form>
+                <form class="delete-product" name="remove_from_cart">
+                    <input type="hidden" name="product_id" value="${product.ProductID}">
+                    <button type="submit" class="delete-pr" name="delete-product">Удалить товар</button>
+                </form>
+            ` : `
+                <form name="add_to_cart_form">
+                    <input type="hidden" name="product_id" value="${product.ProductID}">
+                    <input type="number" name="quantity" value="1" min="1" max="${product.Count}" inputmode="numeric" pattern="[0-9]*"><br>
+                    <button type="submit" class="add_to_cart_pr" name="add_to_cart">Добавить в корзину</button>
+                </form>
+            `}
         ` : `
             <p><strong>НЕТ В НАЛИЧИИ</strong></p>
         `}

@@ -19,11 +19,11 @@ document.getElementById('login-form').addEventListener('submit', function (event
         if (data.success) {
             window.location.href = '/';
         } else {
-            alert(data.error || 'Произошла ошибка');
+            alert(data.error);
         }
     })
     .catch(error => {
-        console.error('Ошибка:', error);
+        console.error(error);
     });
 });
 
@@ -48,10 +48,10 @@ document.getElementById('register-form').addEventListener('submit', function (ev
         if (data.success) {
             window.location.href = '/login';
         } else {
-            alert(data.error || 'Произошла ошибка');
+            alert(data.error);
         }
     })
     .catch(error => {
-        console.error('Ошибка:', error);
+        console.error(error);
     });
 });

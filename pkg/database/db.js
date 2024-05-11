@@ -158,6 +158,15 @@ class LocalDataSource {
         await this.pool.execute(query, [userId]);
     }
 
+    async sendFeedBack(userId, email, subject, message) {
+        const query = 'INSERT INTO Feedback (UserID, Email, Subject, Message) VALUES (?, ?, ?, ?)';
+        try {
+        await this.pool.execute(query, [userId, email, subject, message]);
+        } catch (error) {
+            console.error('Ошибка при получении пользователя по имени пользователя:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = LocalDataSource;

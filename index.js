@@ -5,6 +5,7 @@ const mysql = require('mysql2');
 const LocalDataSource = require('./pkg/database/db');
 const SessionManager = require('./pkg/session/manager');
 const cookieParser = require('cookie-parser');
+const { error } = require('console');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -102,8 +103,35 @@ app.get('/cart', async (req, res) => {
     }
 });
 
+app.get('/profile', async (req, res) => {
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+
+    cartCount = await dataSource.getCartCount(req.user.UserID);
+    const isAdmin = req.user.Login === 'admin';
+    const username = req.user.Login;
+
+    res.render('profile', { isAdmin, username, cartCount });
+});
+
+app.get('/feedback', async (req, res) => {
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+
+    cartCount = await dataSource.getCartCount(req.user.UserID);
+    const username = req.user.Login;
+
+    res.render('feedback', { username, cartCount });
+});
+
 app.post('/login-obr', async (req, res) => {
     const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ success: false, error: 'Не заполнены все поля' });
+    }
+
     const user = await dataSource.getUserByUsername(username);
 
     if (user && user.Password == password) {
@@ -116,27 +144,33 @@ app.post('/login-obr', async (req, res) => {
             path: '/',
         });
         
-        res.json({ success: true });
+        res.status(200).json({ success: true });
     } else {
-        res.json({ success: false });
+        res.status(400).json({ success: false, error: 'Неверный логин или пароль!'});
     }
 });
 
 app.post('/register-obr', async (req, res) => {
     const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ success: false, error: 'Не заполнены все поля!' });
+    }
     const existingUser = await dataSource.getUserByUsername(username);
 
     if (existingUser) {
-        res.json({ success: false });
+        res.status(200).json({ success: false, error: 'Пользователь с таким именем уже существует!'});
     } else {
         await dataSource.createUser(username, password);
-        res.json({ success: true });
+        res.status(400).json({ success: true });
     }
 });
 
 app.post('/cart/add', async (req, res) => {
     try {
         const { product_id, quantity } = req.body;
+        if (!quantity) {
+            return res.status(400).json({ success: false, error: 'Не заполнены все поля!' });
+        }
         const user = req.user;
 
         if (!user) {
@@ -158,11 +192,11 @@ app.post('/cart/add', async (req, res) => {
                 remainingCount: remainingCount,
             });
         } else {
-            return res.status(400);
+            return res.status(400).json({ success: false, error: 'Ошибка при добавлении товара в корзину:' });
         }
     } catch (error) {
         console.error('Ошибка при добавлении товара в корзину:', error);
-        return res.status(500);
+        return res.status(500).json({ success: false, error: 'Ошибка при добавлении товара в корзину:' });
     }
 });
 
@@ -179,7 +213,6 @@ app.post('/cart/remove', async (req, res) => {
         await dataSource.removeCartItem(userId, product_id);
         const cartCount = await dataSource.getCartCount(userId);
         const totalPrice = await dataSource.getCartTotalPrice(userId);
-        console.log(cartCount, totalPrice)
         return res.status(200).json({
             success: true,
             cartCount: cartCount,
@@ -207,6 +240,41 @@ app.post('/cart/buy', async (req, res) => {
         return res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 });
+
+app.post('/logout-obr', async (req, res) => {
+    if (!req.user) {
+        res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+
+    const userId = req.user.UserID;
+
+    SessionManager.deleteSession(userId)
+    res.clearCookie('sessionId');
+    res.status(200).json({ success: true, message: 'Вы успешно вышли из учетной записи' });
+});
+
+app.post('/feedback/send', async (req, res) => {
+    const { email, subject, message } = req.body;
+
+    if (!email || !subject || !message) {
+        return res.status(400).json({ success: false, error: 'Не заполнены все поля!' });
+    }
+
+    if (!req.user) {
+        res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+    const userId = req.user.UserID;
+
+    try {
+        await dataSource.sendFeedBack(userId, email, subject, message);
+
+        res.status(200).json({ success: true, message: 'Обратная связь успешно отправлена' });
+    } catch (error) {
+        console.error('Ошибка при отправке обратной связи:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
 
 
 const PORT = process.env.PORT || 8080;

@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.catalog-info {
+    margin-left: 150px;
+}
+
+.main-text {
+    margin-right: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
+
+.catalog-text {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.catalog-info .catalog-text:hover {
+    color: #e6e6e6;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.personal-profile {
+    margin: 12px;
+    font-weight: bold;
+    font-size: 24px;
+    color: white;
+}
+
+.user-cart-info {
+    margin-right: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    margin-right: 5px;
+    padding: 8px 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #358137;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-info a {
+    color: white;
+    text-decoration: none;
+}
+
+.user-info:hover {
+    background-color: #388e3c;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.cart {
+    text-decoration: none;
+    background-color: #358137;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart a {
+    text-decoration: none;
+    color: white;
+}
+
+.cart:hover {
+    background-color: #388e3c;
+}
+
+
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.profile-container button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.logout {
+    background-color: #af5b4c;
+}
+
+.feedback {
+    background-color: #4CAF50;
+}
+
+.logout:hover {
+    background-color: #7a4036;
+}
+
+.feedback:hover {
+    background-color: #45a049;
+}

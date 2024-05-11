@@ -50,7 +50,7 @@ $(document).on('submit', 'form[name="add_to_cart_form"]', function (e) {
             }
         },
         error: function (error) {
-            alert('Ошибка при добавлении товара в корзину.');
+            alert(error);
         }
     });
 });

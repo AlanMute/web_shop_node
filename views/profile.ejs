@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/profile.css">
+    <title>Личный кабинет</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="catalog-info">
+            <a href="/" class="main-text">Главная</a>
+        </div>
+        <div class="search-bar">
+            <span class="personal-profile">Личный кабинет</span>
+        </div>
+        <div class="user-cart-info">
+            <% if (isAdmin) { %>
+                <button class="user-info">
+                    <a href="/profile"><%= username %></a>
+                </button>
+            <% } else { %>
+                    <button class="user-info">
+                        <a href="/profile"><%= username %></a>
+                    </button>
+                    <button class="cart">
+                        <a href="/cart">Корзина: <%= cartCount %> товаров</a>
+                    </button>
+            <% } %>
+        </div>
+    </header>
+
+    <div class="profile-container">
+            <p>Добро пожаловать, <b><%= username %></b>!</p>
+            <form action="/feedback" method="GET">
+                <button type="submit" class="feedback">Обратная связь</button>
+            </form>
+            <form action="/logout" method="POST">
+                <button type="submit" class="logout">Выйти</button>
+            </form>
+    </div>
+</body>
+
+<script src="/js/profile.js"></script>
+</html>

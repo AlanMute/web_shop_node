@@ -42,7 +42,7 @@
     </header>
 
     <% if (isAdmin) { %>
-        <form class="add-new-product">
+        <form method="GET" action="/admin/add_product">
             <button type="submit" name="add_new_product" class="new-product">Добавить новый товар</button>
         </form>
     <% } %>

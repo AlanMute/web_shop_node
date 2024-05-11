@@ -126,6 +126,15 @@ app.get('/feedback', async (req, res) => {
     res.render('feedback', { username, cartCount });
 });
 
+app.get('/admin/add_product', async (req, res) => {
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.redirect('/');
+    }
+
+    user = req.user
+    res.render('addProduct', { user });
+});
+
 app.post('/login-obr', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -290,6 +299,26 @@ app.post('/admin/delete_product', async (req, res) => {
         await dataSource.deleteProduct(product_id);
 
         res.status(200).json({ success: true, message: 'Удаление прошло успешно' });
+    } catch (error) {
+        console.error('Ошибка при удалении товара:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
+app.post('/add-product', async (req, res) => {
+    const { name, price, image, description, count } = req.body;
+
+    if (!name || !price || !image || !description || !count) {
+        return res.status(400).json({ success: false, error: 'Заполнены не все поля!' });
+    }
+
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+
+    try {
+        await dataSource.addProduct(name, price, image, description, count);
+        res.status(200).json({ success: true, message: 'Добавление товара прошло успешно' });
     } catch (error) {
         console.error('Ошибка при удалении товара:', error);
         res.status(500).json({ success: false, error: 'Ошибка сервера' });

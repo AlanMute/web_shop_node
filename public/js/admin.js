@@ -25,5 +25,26 @@ $(document).ready(function () {
             }
         });
     });
-    
+
+    $('#add-product-form').submit(function(event) {
+        event.preventDefault();
+        const formData = $(this).serialize();
+        
+        $.ajax({
+            type: 'POST',
+            url: '/add-product',
+            data: formData,
+            success: function(response) {
+                alert(response.message)
+                window.location.href = '/';
+            },
+            error: function(error) {
+                if (error.responseJSON && error.responseJSON.error) {
+                    alert('Произошла ошибка: ' + error.responseJSON.error);
+                } else {
+                    alert('Произошла ошибка при отправке запроса на сервер.');
+                }
+            }
+        });
+    });
 });

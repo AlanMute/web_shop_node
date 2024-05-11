@@ -179,6 +179,17 @@ class LocalDataSource {
             throw error;
         }
     }
+
+    async addProduct(name, price, image, description, count) {
+        const query = 'INSERT INTO Products (Name, Price, Image, Description, Count) VALUES (?, ?, ?, ?, ?)';
+
+        try {
+            await this.pool.execute(query, [name, price, image, description, count]);
+        } catch (error) {
+            console.error('Ошибка при получении пользователя по имени пользователя:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = LocalDataSource;

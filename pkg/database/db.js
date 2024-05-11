@@ -167,6 +167,18 @@ class LocalDataSource {
             throw error;
         }
     }
+
+    async deleteProduct(product_id) {
+        const cartQuery = 'DELETE FROM Cart WHERE ProductID = ?';
+        const delQuery = 'DELETE FROM Products WHERE ProductID = ?';
+        try {
+            await this.pool.execute(cartQuery, [product_id]);
+            await this.pool.execute(delQuery, [product_id]);
+        } catch (error) {
+            console.error('Ошибка при получении пользователя по имени пользователя:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = LocalDataSource;

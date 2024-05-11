@@ -42,11 +42,13 @@ app.get('/', async (req, res) => {
     const user = req.user;
     let cartCount = 0;
     try {
+        isAdmin = false
         if (user) {
             cartCount = await dataSource.getCartCount(user.UserID);
+            isAdmin = req.user.Login === 'admin';
         }
         const products = await dataSource.getProducts();
-        res.render('index', { products, user, cartCount });
+        res.render('index', { products, user, isAdmin, cartCount });
     } catch (error) {
         console.error('Ошибка:', error);
         res.status(500).send('Произошла ошибка при получении данных');
@@ -55,7 +57,6 @@ app.get('/', async (req, res) => {
 
 app.get('/search', async (req, res) => {
     const searchQuery = req.query.query || '';
-
     try {
         const products = await dataSource.getProducts(searchQuery);
         res.json(products);
@@ -273,6 +274,28 @@ app.post('/feedback/send', async (req, res) => {
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 });
+
+app.post('/admin/delete_product', async (req, res) => {
+    const { product_id } = req.body;
+
+    if (!product_id) {
+        return res.status(400).json({ success: false, error: 'Продукта нет.' });
+    }
+
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.status(401).json({ success: false, error: 'Пользователь не авторизован' });
+    }
+
+    try {
+        await dataSource.deleteProduct(product_id);
+
+        res.status(200).json({ success: true, message: 'Удаление прошло успешно' });
+    } catch (error) {
+        console.error('Ошибка при удалении товара:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+});
+
 
 app.use(async (req, res, next) => {
     user = req.user

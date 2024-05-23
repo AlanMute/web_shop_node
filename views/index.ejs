@@ -11,6 +11,10 @@
 </head>
 
 <body>
+    <script>
+        var productsData = <%- productsJson %>;
+    </script>
+
     <header>
         <div class="catalog-info">
             <a href="/" class="main-text">Главная</a>
@@ -46,6 +50,25 @@
             <button type="submit" name="add_new_product" class="new-product">Добавить новый товар</button>
         </form>
     <% } %>
+    
+    <div id="infoBlock" class="info-block">
+        <div class="info-content">
+            <span class="close-info">&times;</span>
+            <h2>О сайте</h2>
+            <p>Сайт с продуктами. Тут вы можете покупать и смотреть на продукты! Спасибо что вы здесь!</p>
+        </div>
+    </div>
+
+    
+    <div id="productModal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="" id="modalImage" alt="Product Image">
+            <h3 id="modalName"></h3>
+            <p id="modalPrice"></p>
+            <p id="modalDescription"></p>
+        </div>
+    </div>
 
     <div class="products">
         <% if (products && products.length > 0) { %>

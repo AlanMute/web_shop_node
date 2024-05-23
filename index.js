@@ -42,18 +42,19 @@ app.get('/', async (req, res) => {
     const user = req.user;
     let cartCount = 0;
     try {
-        isAdmin = false
+        let isAdmin = false;
         if (user) {
             cartCount = await dataSource.getCartCount(user.UserID);
-            isAdmin = req.user.Login === 'admin';
+            isAdmin = user.Login === 'admin';
         }
         const products = await dataSource.getProducts();
-        res.render('index', { products, user, isAdmin, cartCount });
+        res.render('index', { products, user, isAdmin, cartCount, productsJson: JSON.stringify(products) });
     } catch (error) {
         console.error('Ошибка:', error);
         res.status(500).send('Произошла ошибка при получении данных');
     }
 });
+
 
 app.get('/search', async (req, res) => {
     const searchQuery = req.query.query || '';

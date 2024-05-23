@@ -14,7 +14,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if (response.success) {
-                    productContainer.remove();
+                    window.location.href = '/'; 
                 } else {
                     alert(response.message);
                 }

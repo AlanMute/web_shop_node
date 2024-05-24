@@ -159,3 +159,38 @@ input[type="submit"]:hover {
 .feedbacks button.delete-feedback:hover {
     background-color: #ff4433; /* Измененный цвет кнопки при наведении */
 }
+
+.admin-controls{
+    text-align: center;
+}
+/* Стили для кнопок */
+.admin-controls button {
+    
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #4CAF50; /* Зеленый */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.admin-controls button:hover {
+    background-color: #45a049; /* Темно-зеленый */
+}
+
+/* Скрытие форм по умолчанию */
+.add-product-form,
+.ed-product-form,
+.delete-product-form {
+    display: none; /* скрыты изначально */
+}
+
+/* Стили для форм */
+form {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+}
+

@@ -17,7 +17,7 @@ header {
     margin-left: 150px;
 }
 
-.main-text { /* Главная */
+.main-text {
     margin-right: 35px;
     font-weight: bold;
     cursor: pointer;

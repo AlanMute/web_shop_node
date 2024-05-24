@@ -18,37 +18,39 @@
             <span class="personal-profile">Личный кабинет</span>
         </div>
         <div class="user-cart-info">
-            <% if (isAdmin) { %>
-                <button class="user-info">
-                    <a href="/profile"><%= username %></a>
-                </button>
-            <% } else { %>
-                    <button class="user-info">
-                        <a href="/profile"><%= username %></a>
-                    </button>
-                    <button class="cart">
-                        <a href="/cart">Корзина: <%= cartCount %> товаров</a>
-                    </button>
-            <% } %>
+
+            <button class="user-info">
+                <a href="/profile">
+                    <%= username %>
+                </a>
+            </button>
+
+            <button class="cart">
+                <a href="/cart">Корзина: <%= cartCount %> товаров</a>
+            </button>
+
         </div>
     </header>
 
     <div class="profile-container">
-            <p>Добро пожаловать, <b><%= username %></b>!</p>
-            <% if (isAdmin) { %>
-                <form action="/all-feedback" method="GET">
-                    <button type="submit" class="feedback">Посмотреть жалобы</button>
-                </form>
+        <p>Добро пожаловать, <b>
+                <%= username %>
+            </b>!</p>
+        <% if (isAdmin) { %>
+            <form action="/all-feedback" method="GET">
+                <button type="submit" class="feedback">Посмотреть жалобы</button>
+            </form>
             <% } else {%>
                 <form action="/feedback" method="GET">
                     <button type="submit" class="feedback">Обратная связь</button>
                 </form>
-            <% } %>
-            <form action="/logout" method="POST">
-                <button type="submit" class="logout">Выйти</button>
-            </form>
+                <% } %>
+                    <form action="/logout" method="POST">
+                        <button type="submit" class="logout">Выйти</button>
+                    </form>
     </div>
 </body>
 
 <script src="/js/profile.js"></script>
+
 </html>

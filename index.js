@@ -56,10 +56,9 @@ app.get('/', async (req, res) => {
 });
 
 
-app.get('/search', async (req, res) => {
-    const searchQuery = req.query.query || '';
+app.get('/get-all-products', async (req, res) => {
     try {
-        const products = await dataSource.getProducts(searchQuery);
+        const products = await dataSource.getProducts();
         res.json(products);
     } catch (error) {
         console.error('Ошибка при выполнении запроса поиска:', error);
@@ -125,6 +124,15 @@ app.get('/feedback', async (req, res) => {
     const username = req.user.Login;
 
     res.render('feedback', { username, cartCount });
+});
+
+app.get('/admin-panel', async (req, res) => {
+    if (!req.user || req.user.Login !== 'admin') {
+        return res.redirect('/');
+    }
+
+    user = req.user
+    res.render('admin-panel', { user });
 });
 
 app.get('/admin/add_product', async (req, res) => {
@@ -309,7 +317,7 @@ app.post('/feedback/send', async (req, res) => {
     }
 });
 
-app.post('/admin/delete_product', async (req, res) => {
+app.post('/delete_product', async (req, res) => {
     const { product_id } = req.body;
 
     if (!product_id) {

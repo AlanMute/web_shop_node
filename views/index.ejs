@@ -32,11 +32,16 @@
                         <%= user.Login %>
                     </a>
                 </button>
-                <% if (!isAdmin) { %>
+                <% if (isAdmin) { %>
+                    <button class="cart">
+                        <a href="/admin-panel">Админка</a>
+                    </button>
+                    <% } %>
+                
                     <button class="cart">
                         <a href="/cart">Корзина: <%= cartCount %> товаров</a>
                     </button>
-                    <% } %>
+                    
                         <% } else { %>
                             <button class="user-info">
                                 <a href="/login">Войти</a>
@@ -44,12 +49,6 @@
                             <% } %>
         </div>
     </header>
-
-    <% if (isAdmin) { %>
-        <form method="GET" action="/admin/add_product">
-            <button type="submit" name="add_new_product" class="new-product">Добавить новый товар</button>
-        </form>
-    <% } %>
     
     <div id="infoBlock" class="info-block">
         <div class="info-content">
@@ -80,27 +79,17 @@
                     
                     <% if (product.Count > 0) { %>
                         <p>Осталось: <%= product.Count %> шт.</p>
-                        <% if (!isAdmin) { %>
+                        
                             <form name="add_to_cart_form">
                                 <input type="hidden" name="product_id" value="<%= product.ProductID %>">
                                 <input type="number" name="quantity" class="status" value="1" min="1" max="<%= product.Count %>" inputmode="numeric" pattern="[0-9]*"><br>
                                 <button type="submit" class="add_to_cart_pr">Добавить в корзину</button>
                             </form>
-                        <% } %>
+                        
                     <% } else { %>
                         <p><strong>НЕТ В НАЛИЧИИ</strong></p>
                     <% } %>
     
-                    <% if (isAdmin) { %>
-                        <form class="edit-product" method="GET" action="/admin/ed_product">
-                            <input type="hidden" name="product_id" value="<%= product.ProductID %>">
-                            <button type="submit" name="edit_product">Изменить товар</button>
-                        </form>
-                        <form class="delete-product" name="remove_from_cart">
-                            <input type="hidden" name="product_id" value="<%= product.ProductID %>">
-                            <button type="submit" class="delete-pr" name="delete-product">Удалить товар</button>
-                        </form>
-                    <% } %>
                 </div>
             <% }); %>
         <% } else { %>
@@ -110,9 +99,6 @@
     
 
     <script src="/js/main.js"></script>
-    <% if (isAdmin) { %>
-        <script src="/js/admin.js"></script>
-    <% } %>
 </body>
 
 </html>

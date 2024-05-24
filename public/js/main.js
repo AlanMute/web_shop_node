@@ -2,19 +2,18 @@ document.querySelector('.close-info').addEventListener('click', function() {
     document.getElementById('infoBlock').style.display = 'none';
 });
 
-document.querySelectorAll('.product img').forEach(item => {
-    item.addEventListener('click', function() {
-        var productBlock = this.closest('.product');
+document.querySelector('.products').addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.closest('.product')) {
+        var productBlock = e.target.closest('.product');
         var productId = productBlock.querySelector('input[name="product_id"]').value;
         var product = productsData.find(p => p.ProductID == productId);
-
         document.getElementById('modalImage').src = product.Image;
         document.getElementById('modalName').textContent = product.Name;
         document.getElementById('modalPrice').textContent = `Цена: ${product.Price} руб.`;
         document.getElementById('modalDescription').textContent = product.Description;
         
         document.getElementById('productModal').style.display = 'flex';
-    });
+    }
 });
 
 document.querySelector('.close').addEventListener('click', function() {

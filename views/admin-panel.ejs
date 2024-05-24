@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin.css">
+    <title>Добавление товара</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="catalog-info">
+            <a href="/" class="main-text">Главная</a>
+        </div>
+        <div class="search-bar">
+            <span class="action">Админка</span>
+        </div>
+        <div class="user-cart-info">
+            <button class="user-info">
+                <a href="/profile">
+                    <%= user.Login %>
+                </a>
+            </button>
+        </div>
+    </header>
+
+    <div class="admin-controls">
+        <button id="btn-add-product">Добавить товар</button>
+        <button id="btn-edit-product">Изменить товар</button>
+        <button id="btn-delete-product">Удалить товар</button>
+    </div>
+    
+    <form class="add-product-form" id="add-product-form">
+        <label for="name">Название товара:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="price">Цена:</label>
+        <input type="text" id="price" name="price" required pattern="[0-9.]*"><br>
+
+        <label for="image">Ссылка на изображение:</label>
+        <input type="text" id="image" name="image" required><br>
+
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description" required></textarea><br>
+
+        <label for="count">Количество:</label>
+        <input type="text" id="count" name="count" required required pattern="[0-9]*"><br>
+
+        <input type="submit" value="Создать">
+    </form>
+
+    <form class="ed-product-form" id="ed-product-form">
+        <label for="upd-product-id">Выберите товар для изменения:</label>
+        <select id="upd-product-id" name="product_id" required>
+        </select><br>
+
+        <input type="hidden" name="product_id">
+        <label for="name">Название товара:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="price">Цена:</label>
+        <input type="text" id="price" name="price" required pattern="[0-9.]*"><br>
+
+        <label for="image">Ссылка на изображение:</label>
+        <input type="text" id="image" name="image" required><br>
+
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description" required></textarea><br>
+
+        <label for="count">Количество:</label>
+        <input type="text" id="count" name="count" required pattern="[0-9]*"><br>
+
+        <input type="submit" value="Изменить">
+    </form>
+
+    <form class="delete-product-form" id="delete-product-form">
+        <label for="delete-product-id">Выберите товар для удаления:</label>
+        <select id="delete-product-id" name="product_id" required>
+        </select><br>
+        <input type="submit" value="Удалить">
+    </form>
+    
+    <script src="/js/admin.js"></script>
+</body>
+
+</html>

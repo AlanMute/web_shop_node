@@ -59,7 +59,7 @@ app.get('/', async (req, res) => {
 app.get('/get-all-products', async (req, res) => {
     try {
         const products = await dataSource.getProducts();
-        res.json(products);
+        res.status(200).json(products);
     } catch (error) {
         console.error('Ошибка при выполнении запроса поиска:', error);
         res.status(500).json({ error: 'Произошла ошибка при поиске товаров' });
@@ -115,17 +115,6 @@ app.get('/profile', async (req, res) => {
     res.render('profile', { isAdmin, username, cartCount });
 });
 
-app.get('/feedback', async (req, res) => {
-    if (!req.user) {
-        return res.redirect('/login');
-    }
-
-    cartCount = await dataSource.getCartCount(req.user.UserID);
-    const username = req.user.Login;
-
-    res.render('feedback', { username, cartCount });
-});
-
 app.get('/admin-panel', async (req, res) => {
     if (!req.user || req.user.Login !== 'admin') {
         return res.redirect('/');
@@ -135,37 +124,18 @@ app.get('/admin-panel', async (req, res) => {
     res.render('admin-panel', { user });
 });
 
-app.get('/admin/add_product', async (req, res) => {
+app.get('/get-all-feedback', async (req, res) => {
     if (!req.user || req.user.Login !== 'admin') {
         return res.redirect('/');
     }
 
-    user = req.user
-    res.render('addProduct', { user });
-});
-
-app.get('/admin/ed_product', async (req, res) => {
-    if (!req.user || req.user.Login !== 'admin') {
-        return res.redirect('/');
+    try {
+        const feedbacks = await dataSource.getFeedbacks()
+        res.status(200).json(feedbacks);
+    } catch (error) {
+        console.error('Ошибка при получении фидбэков:', error);
+        res.status(500).json({ error: 'Ошибка при получении фидбэков' });
     }
-    user = req.user
-    const productId = req.query.product_id;
-    const product = await dataSource.getProduct(productId)
-    if (!product){
-        return res.redirect('/');
-    }
-
-    res.render('editProduct', { user, product });
-});
-
-app.get('/all-feedback', async (req, res) => {
-    if (!req.user || req.user.Login !== 'admin') {
-        return res.redirect('/');
-    }
-    user = req.user
-    const feedbacks = await dataSource.getFeedbacks()
-
-    res.render('listFeedBack', { user, feedbacks });
 });
 
 app.post('/login-obr', async (req, res) => {

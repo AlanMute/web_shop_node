@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/profile.css">
     <title>Личный кабинет</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/feedback.css">
 </head>
 
 <body>
@@ -37,17 +38,56 @@
                 <%= username %>
             </b>!</p>
         <% if (isAdmin) { %>
-            <form action="/all-feedback" method="GET">
-                <button type="submit" class="feedback">Посмотреть жалобы</button>
-            </form>
+                <button id="btn-view-feedbacks" type="button" class="feedback">Посмотреть жалобы</button>
             <% } else {%>
-                <form action="/feedback" method="GET">
-                    <button type="submit" class="feedback">Обратная связь</button>
-                </form>
+                    <button id="btn-add-feedbacks" type="button" class="feedback">Обратная связь</button>
                 <% } %>
                     <form action="/logout" method="POST">
                         <button type="submit" class="logout">Выйти</button>
                     </form>
+    </div>
+
+    <% if (isAdmin){%>
+        <div class="feedbacks" style="display: none;">
+            <h1>Список фидбеков</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Тема</th>
+                        <th>Сообщение</th>
+                        <th>Дата создания</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody id="feedbacks-body">
+
+                </tbody>
+            </table>
+        </div>
+        
+    <% } else {%>
+        <div class="feedback-container">
+            <h2>Напишите нам</h2>
+            <form class="feedback-form" id="feedback-form">
+                <div class="form-group">
+                    <label for="email">Ваш Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Тема:</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Сообщение:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    <%}%>
+
+    <div id="notification">
     </div>
 </body>
 

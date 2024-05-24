@@ -176,21 +176,33 @@ input[type="submit"]:hover {
 }
 
 .admin-controls button:hover {
-    background-color: #45a049; /* Темно-зеленый */
+    background-color: #45a049;
 }
 
-/* Скрытие форм по умолчанию */
 .add-product-form,
 .ed-product-form,
 .delete-product-form {
-    display: none; /* скрыты изначально */
+    display: none; 
 }
 
-/* Стили для форм */
 form {
     margin-top: 20px;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 5px;
 }
+
+#notification {
+    max-width: 700px;
+    overflow-y: auto;
+    display: none; 
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    background: green; 
+    color: white; 
+    padding: 10px; 
+    border-radius: 5px;
+}
+
 

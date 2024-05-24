@@ -59,10 +59,10 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                data.forEach(function(product) {
-                    var option = $('<option>', { 
+                data.forEach(function (product) {
+                    var option = $('<option>', {
                         value: product.ProductID,
-                        text : product.Name
+                        text: product.Name
                     });
                     option.data('price', product.Price);
                     option.data('image', product.Image);
@@ -96,10 +96,10 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                data.forEach(function(product) {
-                    var option = $('<option>', { 
+                data.forEach(function (product) {
+                    var option = $('<option>', {
                         value: product.ProductID,
-                        text : product.Name
+                        text: product.Name
                     });
                     $('#delete-product-id').append(option);
                 });
@@ -114,7 +114,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#upd-product-id').change(function() {
+    $('#upd-product-id').change(function () {
         var selectedOption = $(this).find('option:selected');
         $('#ed-product-form #name').val(selectedOption.text());
         $('#ed-product-form #price').val(selectedOption.data('price'));
@@ -123,7 +123,7 @@ $(document).ready(function () {
         $('#ed-product-form #count').val(selectedOption.data('count'));
     });
 
-    $('#add-product-form').on('submit', function(e) {
+    $('#add-product-form').on('submit', function (e) {
         e.preventDefault();
 
         var formData = {
@@ -140,92 +140,104 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(formData),
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
-                    alert('Товар успешно добавлен!');
+                    showNotification('Товар добален<br>Имя: ' + formData.name +
+                        '<br>Цена: ' + formData.price +
+                        '<br>Картинка: ' + formData.image + 
+                        '<br>Описание: ' + formData.description +
+                        '<br>Количество: ' + formData.count);
                     $('#add-product-form')[0].reset();
                 } else {
                     alert('Ошибка: ' + response.error);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Произошла ошибка: ' + error);
             }
         });
     });
 
-    $(document).ready(function() {
-        $('#ed-product-form').on('submit', function(e) {
-            e.preventDefault();
-    
-            var selectedOption = $('#upd-product-id').find('option:selected');
-    
-            var formData = {
-                product_id: selectedOption.val(),
-                name: $('#ed-product-form #name').val(),
-                price: $('#ed-product-form #price').val(),
-                image: $('#ed-product-form #image').val(),
-                description: $('#ed-product-form #description').val(),
-                count: $('#ed-product-form #count').val()
-            };
-    
-            $.ajax({
-                url: '/ed-product',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        alert('Товар успешно изменен!');
-    
-                        selectedOption.text(formData.name);
-                        selectedOption.data('price', formData.price);
-                        selectedOption.data('image', formData.image);
-                        selectedOption.data('description', formData.description);
-                        selectedOption.data('count', formData.count);
-    
-                    } else {
-                        alert('Ошибка: ' + response.error);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('Произошла ошибка при изменении товара: ' + error);
+
+    $('#ed-product-form').on('submit', function (e) {
+        e.preventDefault();
+
+        var selectedOption = $('#upd-product-id').find('option:selected');
+
+        var formData = {
+            product_id: selectedOption.val(),
+            name: $('#ed-product-form #name').val(),
+            price: $('#ed-product-form #price').val(),
+            image: $('#ed-product-form #image').val(),
+            description: $('#ed-product-form #description').val(),
+            count: $('#ed-product-form #count').val()
+        };
+
+        $.ajax({
+            url: '/ed-product',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    showNotification('Товар изменен<br>' + 
+                        '<br>Имя: ' + selectedOption.text() + ' -> ' + formData.name +
+                        '<br>Цена: ' + selectedOption.data('price') + ' -> ' + formData.price +
+                        '<br>Картинка: ' + selectedOption.data('image') + ' -> ' + formData.image +
+                        '<br>Описание: ' + selectedOption.data('description') + ' -> ' + formData.description +
+                        '<br>Количество: ' + selectedOption.data('count') + ' -> '+ formData.count);
+                    $('#add-product-form')[0].reset();
+
+                    selectedOption.text(formData.name);
+                    selectedOption.data('price', formData.price);
+                    selectedOption.data('image', formData.image);
+                    selectedOption.data('description', formData.description);
+                    selectedOption.data('count', formData.count);
+
+                } else {
+                    alert('Ошибка: ' + response.error);
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                alert('Произошла ошибка при изменении товара: ' + error);
+            }
         });
     });
 
-    $(document).ready(function() {
-        $('#delete-product-form').on('submit', function(e) {
-            e.preventDefault();
-    
-            var selectedOption = $('#delete-product-id').find('option:selected');
-            var product_id = selectedOption.val();
-    
-            if (!product_id) {
-                alert('Выберите товар для удаления!');
-                return;
-            }
-    
-            $.ajax({
-                url: '/delete_product',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ product_id: product_id }),
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        alert('Товар успешно удален!');
-                        selectedOption.remove();
-                    } else {
-                        alert('Ошибка: asd' + response.error);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('Произошла ошибка при удалении товара: ' + error);
+    $('#delete-product-form').on('submit', function (e) {
+        e.preventDefault();
+
+        var selectedOption = $('#delete-product-id').find('option:selected');
+        var product_id = selectedOption.val();
+        var product_name = selectedOption.text();
+
+        if (!product_id) {
+            alert('Выберите товар для удаления!');
+            return;
+        }
+
+        $.ajax({
+            url: '/delete_product',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ product_id: product_id }),
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    showNotification('Товар <b>' + product_name + '</b> успешно удален!');
+                    selectedOption.remove();
+                } else {
+                    alert('Ошибка: ' + response.error);
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                alert('Произошла ошибка при удалении товара: ' + error.message);
+            }
         });
-    });    
+    });
+
+    function showNotification(message) {
+        $('#notification').html(message).fadeIn(500).delay(3000).fadeOut(500);
+    }
 });

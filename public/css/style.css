@@ -93,6 +93,26 @@ header {
     transition: background-color 0.3s ease;
 }
 
+.adminka {
+    text-decoration: none;
+    background-color: #358137;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.adminka a{
+    text-decoration: none;
+    color: white;
+}
+
+.adminka:hover {
+    background-color: #388e3c;
+}
+
 .cart a{
     text-decoration: none;
     color: white;

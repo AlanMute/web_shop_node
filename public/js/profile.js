@@ -16,11 +16,7 @@ $('form[action="/logout"]').on('submit', function (event) {
 
 $(document).ready(function () {
     $('#btn-add-feedbacks').click(function () {
-        if ($(this).text().includes('жалобы')) {
-            $('.feedbacks').toggle();
-        } else {
             $('.feedback-container').toggle();
-        }
     });
 
     $('#btn-view-feedbacks').click(function () {

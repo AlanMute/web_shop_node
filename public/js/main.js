@@ -27,12 +27,11 @@ $(document).on('submit', '.search-bar form', function (e) {
     const form = $(this);
     const searchQuery = $('input[name="search"]').val().toLowerCase();
     const filteredProducts = productsData.filter(product => product.Name.toLowerCase().includes(searchQuery) || product.Description.toLowerCase().includes(searchQuery));
-    const isAdmin = form.data('is-admin');
 
-    updateProductList(filteredProducts, isAdmin);
+    updateProductList(filteredProducts);
 });
 
-function updateProductList(products, isAdmin) {
+function updateProductList(products) {
     const productsContainer = document.querySelector('.products');
     productsContainer.innerHTML = '';
 
